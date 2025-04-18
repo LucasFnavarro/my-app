@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 import { api } from "../../services/api";
 
@@ -7,42 +7,56 @@ import "./styles.css";
 
 export function Filmes() {
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const [filme, setFilme] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  
   useEffect(() => {
     async function loadFilme() {
-      await api
-        .get(`/movie/${id}`, {
-          params: {
-            api_key: "8a6eccb7051609ceda3fa0c87ea6df1e",
-            language: "pt-BR",
-          },
-        })
-
-        .then((response) => {
-          setFilme(response.data);
-        })
-        .catch(() => {
-          console.log("Erro na requisição...");
-        });
+      await api.get(`/movie/${id}`, {
+        params:  {
+          api_key: "8a6eccb7051609ceda3fa0c87ea6df1e",
+          language: "pt-BR",
+        }
+      })
+      .then((response) => {
+        setFilme(response.data);
+      })
+      .catch(() => {
+        navigate("/", { replace: true });
+      }); 
     }
 
     loadFilme();
+    setLoading(false);
+  }, [id, navigate]);
+  
 
-    return () => {
-      console.log("COMPONENTE DESMONTADO");
-    };
-  }, []);
+  function salvarFilme() {
+    const minhaLista = localStorage.getItem('@primeflix');
 
-  //   if(loading || !filme){
-  //     return(
-  //         <div>
-  //             <h1>Carregando...</h1>
-  //         </div>
-  //     )
-  //   }
+    let filmesSalvos = JSON.parse(minhaLista) || [];
+  
+    const hasFilme = filmesSalvos.some( (filmesSalvo) => filmesSalvo.id === filme.id );
+
+    if(hasFilme) {
+      alert('Filme já está na lista');
+      return;
+    }
+
+    filmesSalvos.push(filme);
+    localStorage.setItem('@primeflix', JSON.stringify(filmesSalvos));
+    alert('Filme salvo com sucesso');
+  }
+
+    if(loading || !filme){
+      return(
+          <div>
+              <h1>Carregando...</h1>
+          </div>
+      )
+    }
 
   return (
     <div className="filme-container" key={filme.id}>
@@ -81,29 +95,27 @@ export function Filmes() {
             <p>{filme.overview}</p>
           </div>
 
-          <div className="filme-extra-info">
-            <div>
-              <strong>Orçamento:</strong>
-              <p>$150.000.000</p>
-            </div>
-
-            <div>
-              <strong>Receita:</strong>
-              <p>$500.000.000</p>
-            </div>
-
-            <div>
-              <strong>Lucro:</strong>
-              <p>$350.000.000</p>
-            </div>
-          </div>
-
           <div className="filme-buttons">
-            <button className="button-trailer">Assistir Trailer</button>
-            <button className="button-favorite">Adicionar aos Favoritos</button>
+            <Link 
+              to={`https://youtube.com/results?search_query=${filme.title} Trailer`} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="trailer-link"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+              </svg>
+              Ver Trailer
+            </Link>
+            <button 
+              className="button-favorite"
+              onClick={salvarFilme}
+            >
+              Adicionar aos Favoritos
+            </button>
           </div>
         </div>
       </div>
     </div>
-  );
+  )
 }

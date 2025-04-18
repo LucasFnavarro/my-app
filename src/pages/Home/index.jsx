@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 
 import { api } from "../../services/api";
 
-import { Header } from "../../components/Header";
 import "./styles.css";
 
 export function Home() {
@@ -20,7 +19,6 @@ export function Home() {
         },
       });
       setFilmes(response.data.results.slice(0, 10));
-      console.log(response.data.results.slice(0, 2));
     }
 
     loadFilmes();

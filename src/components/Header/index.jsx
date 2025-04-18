@@ -11,9 +11,7 @@ export function Header() {
                 
                 <nav>
                     <Link to="/">Home</Link>
-                    <Link to="/movies">Filmes</Link>
-                    <Link to="/series">Séries</Link>
-                    <Link to="/favorites">Favoritos</Link>
+                    <Link to="/favoritos">Favoritos</Link>
                 </nav>
 
                 <div className="search-container">

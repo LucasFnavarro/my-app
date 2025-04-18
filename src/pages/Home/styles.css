@@ -95,6 +95,35 @@
     justify-content: center;
 }
 
+.ranking-section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+}
+
+.ranking-section h2 {
+    font-size: 32px;
+    margin-bottom: 30px;
+    color: #fff;
+}
+
+.chart-container {
+    background-color: #1f1f1f;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Estilos para melhorar a visualização do gráfico */
+.recharts-cartesian-axis-tick-value {
+    fill: #ccc;
+}
+
+.recharts-tooltip-wrapper {
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
 @media (max-width: 768px) {
     .hero-section h1 {
         font-size: 32px;
